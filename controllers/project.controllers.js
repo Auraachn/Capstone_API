@@ -17,7 +17,7 @@ const getAllProjects = async (req, res) => {
 }
 
 const createNewProject = async (req, res) => {
-    const {body} = req;
+    const { body } = req;
     try{
         await ProjectModel.createNewProject(body);
         res.json({
@@ -30,18 +30,26 @@ const createNewProject = async (req, res) => {
             ServerMessage: error,
         })
     }
-
-    
 }
 
-const UpdateProject = (req, res) => {
+const UpdateProject = async(req, res) => {
     const {identifier_project} = req.params;
-    console.log('identifier_project:', identifier_project);
-    res.json({
-        message: 'Update Project Success',
-        data: req.body,
-    })
-
+    const {body} = req;
+    try {
+        await ProjectModel.UpdateProject(body, identifier_project);
+        res.json({
+            message: 'UPDATE Project Success',
+            data: {
+                id: identifier_project,
+                ...body
+            },
+        })
+    }catch (error) {
+        res.status(500).json({
+            message: 'Server Error',
+            ServerMessage: error,
+        })
+    }  
 }
 
 const DeleteProject = (req, res) => {

@@ -2,9 +2,9 @@ const ProjectModel = require('../models/tb_request_customer')
 
 const getAllRequests = async (req, res) => {
     try {
-        const [data]  = await ProjectModel.getAllRequests();
+        const [data]  = await ProjectModel.getAllRequest();
         res.json({
-        message: 'Get All Project Success',
+        message: 'Get All Requests Success',
         data: data
         })
     } catch (error) {
@@ -18,10 +18,11 @@ const getAllRequests = async (req, res) => {
 
 const createNewRequests = async (req, res) => {
     const {body} = req;
+    console.log(body);
     try{
-        await ProjectModel.createNewRequests(body);
+        await ProjectModel.createNewRequest(body);
         res.json({
-            message: 'Create New Project Success',
+            message: 'Create New Requests Success',
             data: body
         })
     }catch (error) {
@@ -30,25 +31,33 @@ const createNewRequests = async (req, res) => {
             ServerMessage: error,
         })
     }
-
-    
 }
 
-const UpdateRequest = (req, res) => {
-    const {identifier_project} = req.params;
-    console.log('identifier_project:', identifier_project);
-    res.json({
-        message: 'Update Project Success',
-        data: req.body,
-    })
-
+const UpdateRequest = async (req, res) => {
+    const {identifier_request_customer} = req.params;
+    const {body} = req;
+    try {
+        await ProjectModel.UpdateRequest(body, identifier_request_customer);
+        res.json({
+            message: 'UPDATE Request Success',
+            data: {
+                id: identifier_request_customer,
+                ...body
+            },
+        })
+    }catch (error) {
+        res.status(500).json({
+            message: 'Server Error',
+            ServerMessage: error,
+        })
+    }  
 }
 
 const DeleteRequest = (req, res) => {
     const {identifier_project} = req.params;
     console.log('identifier_project:', identifier_project);
     res.json({
-        message: 'Delete Project Success',
+        message: 'Delete Team Success',
         data: {
             identifier_project: identifier_project,
             name_project: "Private House",

@@ -29,26 +29,34 @@ const createNewRecruitment = async (req, res) => {
             message: 'Server Error',
             ServerMessage: error,
         })
-    }
-
-    
+    }    
 }
 
-const UpdateRecruitment = (req, res) => {
-    const {identifier_project} = req.params;
-    console.log('identifier_project:', identifier_project);
-    res.json({
-        message: 'Update Project Success',
-        data: req.body,
-    })
-
+const UpdateRecruitment = async(req, res) => {
+    const {identifier_recruitment_team} = req.params;
+    const {body} = req;
+    try {
+        await ProjectModel.UpdateRecruitment(body, identifier_recruitment_team);
+        res.json({
+            message: 'UPDATE Team Success',
+            data: {
+                id: identifier_recruitment_team,
+                ...body
+            },
+        })
+    }catch (error) {
+        res.status(500).json({
+            message: 'Server Error',
+            ServerMessage: error,
+        })
+    }  
 }
 
 const DeleteRecruitment = (req, res) => {
     const {identifier_project} = req.params;
     console.log('identifier_project:', identifier_project);
     res.json({
-        message: 'Delete Project Success',
+        message: 'Delete Team Success',
         data: {
             identifier_project: identifier_project,
             name_project: "Private House",
