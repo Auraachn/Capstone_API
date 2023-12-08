@@ -1,3 +1,4 @@
+
 const ProjectModel = require('../models/tb_projects')
 
 const getAllProjects = async (req, res) => {
@@ -18,26 +19,53 @@ const getAllProjects = async (req, res) => {
 
 const createNewProject = async (req, res) => {
     const { body } = req;
-    try{
-        await ProjectModel.createNewProject(body);
-        res.json({
+
+    if (
+        !body.identifier_project ||
+        !body.name_project ||
+        !body.type_project ||
+        !body.access_project ||
+        !body.location_project ||
+        !body.price_list_project_cash ||
+        !body.price_list_project_credit ||
+        !body.name_developer ||
+        !body.contact_developer
+      ) {
+        return res.status(400).json({
+            message: 'Masukkan data yang benar',
+            data: null,
+          });
+        }
+      
+        try {
+          const existingProject = await ProjectModel.checkProjectExistence(body.identifier_project);
+      
+          if (existingProject === 'yes') {
+            return res.status(400).json({
+              message: 'Identifier_project sudah ada, buat yang lain dan harus unik',
+              data: null,
+            });
+          }else {
+            await ProjectModel.createNewProject(body);
+          res.status(201).json({
             message: 'Create New Project Success',
-            data: body
-        })
-    }catch (error) {
-        res.status(500).json({
+            data: body,
+          });
+          }
+        } catch (error) {
+          res.status(500).json({
             message: 'Server Error',
             ServerMessage: error,
-        })
-    }
-}
+          });
+        }
+};
 
 const UpdateProject = async(req, res) => {
     const {identifier_project} = req.params;
     const {body} = req;
     try {
         await ProjectModel.UpdateProject(body, identifier_project);
-        res.json({
+        res.status(201).json({
             message: 'UPDATE Project Success',
             data: {
                 id: identifier_project,
@@ -52,21 +80,27 @@ const UpdateProject = async(req, res) => {
     }  
 }
 
-const DeleteProject = (req, res) => {
+const DeleteProject = async(req, res) => {
     const {identifier_project} = req.params;
     console.log('identifier_project:', identifier_project);
-    res.json({
-        message: 'Delete Project Success',
-        data: {
-            identifier_project: identifier_project,
-            name_project: "Private House",
-        }
-    })
+
+     try{
+        await ProjectModel.DeleteProject(identifier_project);
+        res.json({
+            message: 'DELETE Project Success',
+            data: null
+        })
+    }catch (error) {
+        res.status(500).json({
+            message: 'Server Error',
+            ServerMessage: error,
+        })
+    }
 }
 
 module.exports = {
-   getAllProjects,
-   createNewProject,
-   UpdateProject,
-   DeleteProject,
-}
+    getAllProjects,
+    createNewProject,
+    UpdateProject,
+    DeleteProject
+  };

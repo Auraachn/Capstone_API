@@ -6,6 +6,21 @@ const getAllProject = () => {
   return dbpool.execute(SQLQuery);
 }
 
+const getProjectbyIdentifier = (identifier_project) => {
+  const SQLQuery = `SELECT * FROM tb_projects WHERE WHERE identifier_project = '${identifier_project}'`;
+
+  return dbpool.execute(SQLQuery);
+}
+
+
+const checkProjectExistence = async (identifier_project) => {
+  const SQLQuery = 'SELECT CASE WHEN COUNT(*) > 0 THEN "yes" ELSE "no" END AS result FROM tb_projects WHERE identifier_project = ?';
+  const [results] = await dbpool.execute(SQLQuery, [identifier_project]);
+  return results[0].result;
+};
+
+
+
 const createNewProject = (body) => {
   const SQLQuery = `INSERT INTO tb_projects 
                     (identifier_project, name_project, type_project, access_project, status_project, location_project, price_list_project_cash, price_list_project_credit, promo, description_project, bedroom, bathroom, carport, building_area, surface_area, facility, name_developer, contact_developer, loan_bank, handover) 
@@ -61,13 +76,16 @@ const UpdateProject = (body, identifier_project) => {
 };
 
 
-const DeleteProject = () => {
-
+const DeleteProject = (identifier_project) => {
+  const SQLQuery = `DELETE FROM tb_projects WHERE identifier_project = '${identifier_project}'`;
+  return dbpool.execute(SQLQuery);
 }
 
 module.exports = {
   getAllProject,
   createNewProject,
   UpdateProject,
-  DeleteProject
+  DeleteProject,
+  getProjectbyIdentifier,
+  checkProjectExistence
 }

@@ -6,6 +6,19 @@ const getAllRecruitment = () => {
   return dbpool.execute(SQLQuery);
 }
 
+const getRecruitmentbyIdentifier = (identifier_recruitment_team) => {
+  const SQLQuery = `SELECT * FROM tb_recruitment_teams WHERE WHERE identifier_project = '${identifier_recruitment_team}'`;
+
+  return dbpool.execute(SQLQuery);
+}
+
+
+const checkRecruitmentExistence = async (identifier_recruitment_team) => {
+  const SQLQuery = 'SELECT CASE WHEN COUNT(*) > 0 THEN "yes" ELSE "no" END AS result FROM tb_recruitment_teams WHERE identifier_recruitment_team = ?';
+  const [results] = await dbpool.execute(SQLQuery, [identifier_recruitment_team]);
+  return results[0].result;
+};
+
 const createNewRecruitment = (body) => {
   const SQLQuery = `INSERT INTO tb_recruitment_teams 
                     (identifier_recruitment_team, name_team, post_team, domicile_team, job_description, experience, certificate) 
@@ -38,13 +51,16 @@ const UpdateRecruitment = (body, identifier_recruitment_team) => {
 
 }
 
-const DeleteRecruitment = () => {
-
+const DeleteRecruitment = (identifier_recruitment_team) => {
+  const SQLQuery = `DELETE FROM tb_recruitment_teams identifier_recruitment_team = '${identifier_recruitment_team}'`;
+  return dbpool.execute(SQLQuery);
 }
 
 module.exports = {
   getAllRecruitment,
   createNewRecruitment,
   UpdateRecruitment,
-  DeleteRecruitment
+  DeleteRecruitment,
+  getRecruitmentbyIdentifier,
+  checkRecruitmentExistence
 }
