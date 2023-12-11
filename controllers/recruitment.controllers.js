@@ -16,11 +16,11 @@ const getAllRecruitment = async (req, res) => {
     
 }
 
+
 const createNewRecruitment = async (req, res) => {
     const { body } = req;
 
     if (
-        !body.identifier_recruitment_team ||
         !body.name_team ||
         !body.post_team ||
         !body.domicile_team ||
@@ -35,21 +35,13 @@ const createNewRecruitment = async (req, res) => {
     }
 
     try {
-        const existingRecruitment = await ProjectModel.checkRecruitmentExistence(body.identifier_recruitment_team);
-
-        if (existingRecruitment === 'yes') {
-            return res.status(400).json({
-                message: 'Identifier_recruitment_team sudah ada, buat yang lain dan harus unik',
-                data: null,
-            });
-        } else {
             await ProjectModel.createNewRecruitment(body);
             res.status(201).json({
                 message: 'Create New Recruitment Success',
                 data: body,
             });
         }
-    } catch (error) {
+    catch (error) {
         res.status(500).json({
             message: 'Server Error',
             ServerMessage: error,

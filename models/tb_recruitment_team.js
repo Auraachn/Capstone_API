@@ -12,12 +12,27 @@ const getRecruitmentbyIdentifier = (identifier_recruitment_team) => {
   return dbpool.execute(SQLQuery);
 }
 
+const checkRecruitmentIdentifier = (body) => {
+  const SQLQuery = `
+      SELECT identifier_recruitment_team
+      FROM tb_recruitment_teams
+      WHERE
+          name_team = '${body.name_team}' AND
+          post_team = '${body.post_team}' AND
+          domicile_team = '${body.domicile_team}' AND
+          job_description = '${body.job_description}' AND
+          experience = '${body.experience}' AND
+          certificate = '${body.certificate}';
+  `;
 
-const checkRecruitmentExistence = async (identifier_recruitment_team) => {
-  const SQLQuery = 'SELECT CASE WHEN COUNT(*) > 0 THEN "yes" ELSE "no" END AS result FROM tb_recruitment_teams WHERE identifier_recruitment_team = ?';
-  const [results] = await dbpool.execute(SQLQuery, [identifier_recruitment_team]);
-  return results[0].result;
+  return dbpool.execute(SQLQuery)
+      .then(([result]) => ({ identifier_recruitment_team: result.length > 0 ? result[0].identifier_recruitment_team : null }))
+      .catch((error) => {
+          throw error;
+      });
 };
+
+  
 
 const createNewRecruitment = (body) => {
   const SQLQuery = `INSERT INTO tb_recruitment_teams 
@@ -35,6 +50,18 @@ const createNewRecruitment = (body) => {
   return dbpool.execute(SQLQuery);
 }
 
+const createNewRecruitmentLoginData = (body) =>{
+  const SQLQuery = `INSERT INTO tb_recruitment_team_login_data 
+                  (identifier_recruitment_team, 
+                    email_recruitment_team, 
+                    password_recruitment_team, 
+                    username)
+                  VALUES (${body.identifier_recruitment_team}, 
+                    '${body.email_recruitment_team}', 
+                    '${body.password_recruitment_team}', 
+                    '${body.username}') `;
+  return dbpool.execute(SQLQuery);
+}
 
 const UpdateRecruitment = (body, identifier_recruitment_team) => {
   const SQLQuery = `UPDATE tb_recruitment_teams 
@@ -56,11 +83,51 @@ const DeleteRecruitment = (identifier_recruitment_team) => {
   return dbpool.execute(SQLQuery);
 }
 
+const checkDataRecruitmentLogin = ({ email, username }) => {
+  const condition = email ? `email_recruitment_team = ?` : `username = ?`;
+
+  const SQLQuery = `
+      SELECT
+          username,
+          email_recruitment_team AS email,
+          password_recruitment_team AS password,
+          -- Add other columns you want to retrieve
+          CASE
+              WHEN COUNT(*) > 0 THEN 1
+              ELSE 0
+          END AS user_exists
+      FROM tb_recruitment_team_login_data
+      WHERE
+          ${condition};
+  `;
+
+  return dbpool.execute(SQLQuery, [email || username]);
+};
+
+const checkUsernameExists = (username) => {
+  const SQLQuery = `
+      SELECT COUNT(*) AS usernameCount
+      FROM tb_recruitment_team_login_data
+      WHERE username = ?;
+  `;
+
+  return dbpool.execute(SQLQuery, [username])
+      .then(([result]) => result[0].usernameCount > 0 ? 1 : 0)
+      .catch((error) => {
+          console.error(error);
+          return 0;
+      });
+};
+
+
 module.exports = {
   getAllRecruitment,
   createNewRecruitment,
   UpdateRecruitment,
   DeleteRecruitment,
   getRecruitmentbyIdentifier,
-  checkRecruitmentExistence
+  checkRecruitmentIdentifier,
+  checkDataRecruitmentLogin,
+  createNewRecruitmentLoginData,
+  checkUsernameExists
 }

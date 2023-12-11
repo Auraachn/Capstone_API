@@ -20,7 +20,6 @@ const createNewRequests = async (req, res) => {
     const { body } = req;
 
     if (
-        !body.identifier_request_customer ||
         !body.name_customer ||
         !body.contact_customer ||
         !body.domicile_customer ||
@@ -36,21 +35,13 @@ const createNewRequests = async (req, res) => {
     }
 
     try {
-        const existingRequest = await ProjectModel.checkRequestExistence(body.identifier_request_customer);
-
-        if (existingRequest === 'yes') {
-            return res.status(400).json({
-                message: 'Identifier_request_customer sudah ada, buat yang lain dan harus unik',
-                data: null,
-            });
-        } else {
-            await ProjectModel.createNewRequest(body);
+        await ProjectModel.createNewRequest(body);
             res.status(201).json({
                 message: 'Create New Request Success',
                 data: body,
             });
         }
-    } catch (error) {
+    catch (error) {
         res.status(500).json({
             message: 'Server Error',
             ServerMessage: error,

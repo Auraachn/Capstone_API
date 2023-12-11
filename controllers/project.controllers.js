@@ -21,7 +21,6 @@ const createNewProject = async (req, res) => {
     const { body } = req;
 
     if (
-        !body.identifier_project ||
         !body.name_project ||
         !body.type_project ||
         !body.access_project ||
@@ -38,20 +37,12 @@ const createNewProject = async (req, res) => {
         }
       
         try {
-          const existingProject = await ProjectModel.checkProjectExistence(body.identifier_project);
-      
-          if (existingProject === 'yes') {
-            return res.status(400).json({
-              message: 'Identifier_project sudah ada, buat yang lain dan harus unik',
-              data: null,
-            });
-          }else {
             await ProjectModel.createNewProject(body);
           res.status(201).json({
             message: 'Create New Project Success',
             data: body,
           });
-          }
+          
         } catch (error) {
           res.status(500).json({
             message: 'Server Error',

@@ -19,8 +19,6 @@ const checkProjectExistence = async (identifier_project) => {
   return results[0].result;
 };
 
-
-
 const createNewProject = (body) => {
   const SQLQuery = `INSERT INTO tb_projects 
                     (identifier_project, name_project, type_project, access_project, status_project, location_project, price_list_project_cash, price_list_project_credit, promo, description_project, bedroom, bathroom, carport, building_area, surface_area, facility, name_developer, contact_developer, loan_bank, handover) 
@@ -87,5 +85,6 @@ module.exports = {
   UpdateProject,
   DeleteProject,
   getProjectbyIdentifier,
-  checkProjectExistence
+  checkProjectExistence,
+  
 }
