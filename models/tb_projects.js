@@ -7,7 +7,7 @@ const getAllProject = () => {
 }
 
 const getProjectbyIdentifier = (identifier_project) => {
-  const SQLQuery = `SELECT * FROM tb_projects WHERE WHERE identifier_project = '${identifier_project}'`;
+  const SQLQuery = `SELECT * FROM tb_projects WHERE identifier_project = '${identifier_project}'`;
 
   return dbpool.execute(SQLQuery);
 }
@@ -21,13 +21,13 @@ const checkProjectExistence = async (identifier_project) => {
 
 const createNewProject = (body) => {
   const SQLQuery = `INSERT INTO tb_projects 
-                    (identifier_project, name_project, type_project, access_project, status_project, location_project, price_list_project_cash, price_list_project_credit, promo, description_project, bedroom, bathroom, carport, building_area, surface_area, facility, name_developer, contact_developer, loan_bank, handover) 
+                    (identifier_project, name_project, type_project, ready, indent, location_project, price_list_project_cash, price_list_project_credit, promo, description_project, bedroom, bathroom, carport, building_area, surface_area, facility, name_developer, contact_developer, loan_bank, handover) 
                     VALUES (
                       '${body.identifier_project}',
                       '${body.name_project}',
                       '${body.type_project}',
-                      '${body.access_project}',
-                      '${body.status_project}',
+                      '${body.ready}',
+                      '${body.indent}',
                       '${body.location_project}',
                       '${body.price_list_project_cash}',
                       '${body.price_list_project_credit}',

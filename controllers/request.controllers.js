@@ -16,6 +16,23 @@ const getAllRequests = async (req, res) => {
     
 }
 
+const getRecruitmentbyId = async (req, res) => {
+    const {identifier_request_customer} = req.params;
+    try {
+        const [data]  = await ProjectModel.getRequestbyIdentifier(identifier_request_customer);
+        res.json({
+        message: 'Get Requst Success',
+        data: data
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: 'Server Error',
+            ServerMessage: error,
+        })
+    }
+    
+}
+
 const createNewRequests = async (req, res) => {
     const { body } = req;
 
@@ -93,4 +110,5 @@ module.exports = {
    createNewRequests,
    UpdateRequest,
    DeleteRequest,
+   getRecruitmentbyId,
 }

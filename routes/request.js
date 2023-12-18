@@ -6,6 +6,9 @@ const router = express.Router();
 //GET
 router.get('/', RequestControllers.getAllRequests);
 
+//GET by Id
+router.get('/:identifier_request_customer', RequestControllers.getRecruitmentbyId);
+
 //CREATE - POST
 router.post('/', RequestControllers.createNewRequests);
 

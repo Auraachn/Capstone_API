@@ -16,6 +16,22 @@ const getAllRecruitment = async (req, res) => {
     
 }
 
+const getRecruitmentbyId = async (req, res) => {
+    const {identifier_recruitment_team} = req.params;
+    try {
+        const [data]  = await ProjectModel.getRecruitmentbyIdentifier(identifier_recruitment_team);
+        res.json({
+        message: 'Get Project Success',
+        data: data
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: 'Server Error',
+            ServerMessage: error,
+        })
+    }
+    
+}
 
 const createNewRecruitment = async (req, res) => {
     const { body } = req;
@@ -92,5 +108,6 @@ module.exports = {
    getAllRecruitment,
    createNewRecruitment,
    UpdateRecruitment,
-   DeleteRecruitment
+   DeleteRecruitment,
+   getRecruitmentbyId
 }

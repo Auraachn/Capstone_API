@@ -7,7 +7,7 @@ const getAllRecruitment = () => {
 }
 
 const getRecruitmentbyIdentifier = (identifier_recruitment_team) => {
-  const SQLQuery = `SELECT * FROM tb_recruitment_teams WHERE WHERE identifier_project = '${identifier_recruitment_team}'`;
+  const SQLQuery = `SELECT * FROM tb_recruitment_teams WHERE identifier_recruitment_team = '${identifier_recruitment_team}'`;
 
   return dbpool.execute(SQLQuery);
 }
@@ -32,7 +32,6 @@ const checkRecruitmentIdentifier = (body) => {
       });
 };
 
-  
 
 const createNewRecruitment = (body) => {
   const SQLQuery = `INSERT INTO tb_recruitment_teams 

@@ -6,6 +6,9 @@ const router = express.Router();
 //GET
 router.get('/', ProjectController.getAllProjects);
 
+//GET by Id
+router.get('/:identifier_project', ProjectController.getProjectbyId)
+
 //CREATE - POST
 router.post('/', ProjectController.createNewProject);
 

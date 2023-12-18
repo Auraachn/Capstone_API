@@ -17,16 +17,35 @@ const getAllProjects = async (req, res) => {
     
 }
 
+const getProjectbyId = async (req, res) => {
+    const {identifier_project} = req.params;
+    try {
+        const [data]  = await ProjectModel.getProjectbyIdentifier(identifier_project);
+        res.json({
+        message: 'Get Project Success',
+        data: data
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: 'Server Error',
+            ServerMessage: error,
+        })
+    }
+    
+}
+
 const createNewProject = async (req, res) => {
     const { body } = req;
 
     if (
         !body.name_project ||
         !body.type_project ||
-        !body.access_project ||
+        !body.ready ||
+        !body.indent ||
         !body.location_project ||
         !body.price_list_project_cash ||
         !body.price_list_project_credit ||
+        !body.surface_area ||
         !body.name_developer ||
         !body.contact_developer
       ) {
@@ -93,5 +112,6 @@ module.exports = {
     getAllProjects,
     createNewProject,
     UpdateProject,
-    DeleteProject
+    DeleteProject,
+    getProjectbyId
   };
