@@ -1,5 +1,6 @@
 
-const mysql =  require('mysql2');
+const mysql = require('mysql2');
+
 require('dotenv').config();
 
 const dbpool = mysql.createPool({
@@ -9,8 +10,11 @@ const dbpool = mysql.createPool({
     database: process.env.DB_NAME,
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
 });
 
+console.log(`Connecting to MySQL database on host ${process.env.DB_HOST}`);
+
 module.exports = dbpool.promise();
+
 
