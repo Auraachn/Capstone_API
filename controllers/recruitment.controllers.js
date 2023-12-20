@@ -1,15 +1,15 @@
-const ProjectModel = require('../models/tb_recruitment_team')
+const RecruitmentModel = require('../models/tb_recruitment_team')
 
 const getAllRecruitment = async (req, res) => {
     try {
-        const [data]  = await ProjectModel.getAllRecruitment();
+        const [data]  = await RecruitmentModel.getAllRecruitment();
         res.json({
-        message: 'Get All Project Success',
-        data: data
+            value: 1,
+            result: data
         })
     } catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         })
     }
@@ -19,14 +19,14 @@ const getAllRecruitment = async (req, res) => {
 const getRecruitmentbyId = async (req, res) => {
     const {identifier_recruitment_team} = req.params;
     try {
-        const [data]  = await ProjectModel.getRecruitmentbyIdentifier(identifier_recruitment_team);
+        const [data]  = await RecruitmentModel.getRecruitmentbyIdentifier(identifier_recruitment_team);
         res.json({
-        message: 'Get Project Success',
-        data: data
+            value: 1,
+            result: data
         })
     } catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         })
     }
@@ -46,20 +46,20 @@ const createNewRecruitment = async (req, res) => {
       ) {
         return res.status(400).json({
             message: 'Masukkan data yang benar',
-            data: null,
+            result: null,
         });
     }
 
     try {
-            await ProjectModel.createNewRecruitment(body);
+            await RecruitmentModel.createNewRecruitment(body);
             res.status(201).json({
-                message: 'Create New Recruitment Success',
-                data: body,
+                value: 1,
+                result: body,
             });
         }
     catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         });
     }
@@ -70,17 +70,17 @@ const UpdateRecruitment = async(req, res) => {
     const {identifier_recruitment_team} = req.params;
     const {body} = req;
     try {
-        await ProjectModel.UpdateRecruitment(body, identifier_recruitment_team);
+        await RecruitmentModel.UpdateRecruitment(body, identifier_recruitment_team);
         res.json({
             message: 'UPDATE Team Success',
-            data: {
+            result: {
                 id: identifier_recruitment_team,
                 ...body
             },
         })
     }catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value:0,
             ServerMessage: error,
         })
     }  
@@ -91,14 +91,14 @@ const DeleteRecruitment = async(req, res) => {
     console.log('identifier_recruitment_team:', identifier_recruitment_team);
 
      try{
-        await ProjectModel.DeleteRecruitment(identifier_recruitment_team);
+        await RecruitmentModel.DeleteRecruitment(identifier_recruitment_team);
         res.json({
-            message: 'DELETE Project Success',
-            data: null
+            value: 1,
+            result: null
         })
     }catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         })
     }

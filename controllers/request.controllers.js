@@ -1,15 +1,15 @@
-const ProjectModel = require('../models/tb_request_customer')
+const RequestModel = require('../models/tb_request_customer')
 
 const getAllRequests = async (req, res) => {
     try {
-        const [data]  = await ProjectModel.getAllRequest();
+        const [data]  = await RequestModel.getAllRequest();
         res.json({
-        message: 'Get All Requests Success',
-        data: data
+            value: 1,
+            result: data
         })
     } catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         })
     }
@@ -19,14 +19,14 @@ const getAllRequests = async (req, res) => {
 const getRecruitmentbyId = async (req, res) => {
     const {identifier_request_customer} = req.params;
     try {
-        const [data]  = await ProjectModel.getRequestbyIdentifier(identifier_request_customer);
+        const [data]  = await RequestModel.getRequestbyIdentifier(identifier_request_customer);
         res.json({
-        message: 'Get Requst Success',
-        data: data
+            value: 1,
+            result: data
         })
     } catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         })
     }
@@ -47,20 +47,20 @@ const createNewRequests = async (req, res) => {
       ) {
         return res.status(400).json({
             message: 'Masukkan data yang benar',
-            data: null,
+            result: null,
         });
     }
 
     try {
-        await ProjectModel.createNewRequest(body);
-            res.status(201).json({
-                message: 'Create New Request Success',
-                data: body,
-            });
+        await RequestModel.createNewRequest(body);
+        res.json({
+            value: 1,
+            result: body
+        })
         }
     catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         });
     }
@@ -71,17 +71,17 @@ const UpdateRequest = async (req, res) => {
     const {identifier_request_customer} = req.params;
     const {body} = req;
     try {
-        await ProjectModel.UpdateRequest(body, identifier_request_customer);
+        await RequestModel.UpdateRequest(body, identifier_request_customer);
         res.json({
-            message: 'UPDATE Request Success',
-            data: {
+            value: 0,
+            result: {
                 id: identifier_request_customer,
                 ...body
             },
         })
     }catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         })
     }  
@@ -92,14 +92,14 @@ const DeleteRequest = async(req, res) => {
     console.log('identifier_request_customer:', identifier_request_customer);
 
      try{
-        await ProjectModel.DeleteRequest(identifier_request_customer);
+        await RequestModel.DeleteRequest(identifier_request_customer);
         res.json({
-            message: 'DELETE Project Success',
-            data: null
+            value: 1,
+            result: null
         })
     }catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         })
     }

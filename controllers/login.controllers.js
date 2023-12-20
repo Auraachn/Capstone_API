@@ -1,4 +1,4 @@
-const ProjectModel = require('../models/tb_recruitment_team')
+const LoginModel = require('../models/tb_recruitment_team')
 
 const checkLogin = async (req, res) => {
     const { body } = req;
@@ -22,7 +22,7 @@ const checkLogin = async (req, res) => {
     }
 
     try {
-        const result = await ProjectModel.checkDataRecruitmentLogin({
+        const result = await LoginModel.checkDataRecruitmentLogin({
             [condition]: value,
             password: body.password,
         }); 
@@ -46,13 +46,13 @@ const checkLogin = async (req, res) => {
                 }
             } else {
                res.status(401).json({
-                    message: 'Invalid credentials. Please check your username or email.',
+                    message: 'Invalid data. Please check your username or email.',
                     data: null,
                 });
             }
         } else {
             res.status(401).json({
-                message: 'Invalid credentials. Please check your username or email.',
+                message: 'Invalid data. Please check your username or email.',
                 data: null,
             });
         }

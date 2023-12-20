@@ -5,12 +5,12 @@ const getAllProjects = async (req, res) => {
     try {
         const [data]  = await ProjectModel.getAllProject();
         res.json({
-        message: 'Get All Project Success',
-        data: data
+            value: 1,
+            result: data
         })
     } catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         })
     }
@@ -22,12 +22,12 @@ const getProjectbyId = async (req, res) => {
     try {
         const [data]  = await ProjectModel.getProjectbyIdentifier(identifier_project);
         res.json({
-        message: 'Get Project Success',
-        data: data
+            value: 1,
+            result: data
         })
     } catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         })
     }
@@ -51,20 +51,20 @@ const createNewProject = async (req, res) => {
       ) {
         return res.status(400).json({
             message: 'Masukkan data yang benar',
-            data: null,
+            result: null,
           });
         }
       
         try {
             await ProjectModel.createNewProject(body);
           res.status(201).json({
-            message: 'Create New Project Success',
-            data: body,
+            value: 1,
+            rwsult: body,
           });
           
         } catch (error) {
           res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
           });
         }
@@ -76,15 +76,15 @@ const UpdateProject = async(req, res) => {
     try {
         await ProjectModel.UpdateProject(body, identifier_project);
         res.status(201).json({
-            message: 'UPDATE Project Success',
-            data: {
+            value: 1,
+            result: {
                 id: identifier_project,
                 ...body
             },
         })
     }catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         })
     }  
@@ -97,12 +97,12 @@ const DeleteProject = async(req, res) => {
      try{
         await ProjectModel.DeleteProject(identifier_project);
         res.json({
-            message: 'DELETE Project Success',
-            data: null
+            value: 1,
+            result: null
         })
     }catch (error) {
         res.status(500).json({
-            message: 'Server Error',
+            value: 0,
             ServerMessage: error,
         })
     }

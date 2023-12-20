@@ -16,7 +16,7 @@ app.use(express.json({ strict: false }))
 app.use('/register', registerRoute)
 app.use('/login', loginRoute)
 app.use('/projects', projectsRoute);
-app.use('/recuitments', recruitmentRoute);
+app.use('/recruitments', recruitmentRoute);
 app.use('/requests', requestsRoute);
 
 module.exports = app;

@@ -1,4 +1,4 @@
-const ProjectModel = require('../models/tb_recruitment_team')
+const RegisterModel = require('../models/tb_recruitment_team')
 
 const RegisterNewRecruitment = async (req, res) => {
     const { body } = req;
@@ -21,7 +21,7 @@ const RegisterNewRecruitment = async (req, res) => {
     }
 
     try {
-        const usernameExists = await ProjectModel.checkUsernameExists(body.username);
+        const usernameExists = await RegisterModel.checkUsernameExists(body.username);
         if (usernameExists) {
             return res.status(400).json({
                 message: 'Username already exists. Choose a different username.',
@@ -37,10 +37,10 @@ const RegisterNewRecruitment = async (req, res) => {
             experience: body.experience,
             certificate: body.certificate,
         };
-        await ProjectModel.createNewRecruitment(recruitmentData);
+        await RegisterModel.createNewRecruitment(recruitmentData);
         
         // Get the identifier_recruitment_team from the inserted recruitment data
-        const { identifier_recruitment_team } = await ProjectModel.checkRecruitmentIdentifier(recruitmentData);
+        const { identifier_recruitment_team } = await RegisterModel.checkRecruitmentIdentifier(recruitmentData);
         
         // Create new login data
         const loginData = {
@@ -49,7 +49,7 @@ const RegisterNewRecruitment = async (req, res) => {
             password_recruitment_team: body.password_recruitment_team,
             username: body.username,
         };
-        await ProjectModel.createNewRecruitmentLoginData(loginData);
+        await RegisterModel.createNewRecruitmentLoginData(loginData);
 
         res.status(201).json({
             message: 'Create New Recruitment Success',
